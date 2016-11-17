@@ -5,6 +5,7 @@ import {Observable} from "rxjs/Rx";
 
 @Injectable()
 export class DrupalService {
+<<<<<<< HEAD
   //private rootUrl = "https://localhost:3027/";
   thisUrl = "https://researchit.cer.auckland.ac.nz/api/content";
   vid_service=2;
@@ -26,19 +27,45 @@ export class DrupalService {
  }
  
  search(category:string, searchChange:Subject<any>, debounceDuration = 400) {
+=======
+  private rootUrl = "https://localhost:3027/";
+  drupalUrl = "https://researchit.cer.auckland.ac.nz/api/content";
+
+  product:any;
+
+  constructor(private http:Http) {
+
+  }
+
+  getProducts(productType)
+  {
+
+  }
+
+  getProduct(productId)
+  {
+    let headers = new Headers();
+    headers.set('Accept', 'application/json');
+
+    return this.http.get(this.drupalUrl + "/" + productId, {headers:headers})
+      .map((response) => response.json());
+  }
+
+  search(category:string, searchChange:Subject<any>, debounceDuration = 400) {
+>>>>>>> b1623af9d149426790fbbedacb0e2d85685dd724
     return searchChange
       .debounceTime(debounceDuration)
       .distinctUntilChanged()
       .switchMap(value => this.rawSearch(category, value.searchTerm, value.subcategories));
   }
-      
- contentsearch(category:string, searchChange:Subject<any>, debounceDuration = 400) {
-   
-     return searchChange
+
+  contentSearch(category:string, searchChange:Subject<any>, debounceDuration = 400) {
+    return searchChange
       .debounceTime(debounceDuration)
       .distinctUntilChanged()
       .switchMap(value => this.rawContentSearch(category, value.searchTerm, value.subcategories));
   }
+<<<<<<< HEAD
      
   frontsearch(category:string, searchChange:Subject<any>, debounceDuration = 400) {
     return searchChange
@@ -49,6 +76,12 @@ export class DrupalService {
          
   rawSearch(category:string, term:string, subcategories:any[]) {
      this.dosearch=new URLSearchParams();
+=======
+
+  rawSearch(category:string, term:string, subcategories:any[]) {
+    var dosearch = new URLSearchParams();
+    console.log(dosearch);
+>>>>>>> b1623af9d149426790fbbedacb0e2d85685dd724
     if (term != undefined && term.trim() != "") {
       this.dosearch.set('search_string', term);
     }
@@ -59,15 +92,27 @@ export class DrupalService {
       }
     }
     let doheaders = new Headers();
+<<<<<<< HEAD
     doheaders.set('Accept', 'application/json'); 
     return this.http
     .get(this.thisUrl + "?limit=10000&fields=all" , {search:this.dosearch, headers:doheaders})
     .map((response)=>response.json());
 
+=======
+    doheaders.set('Accept', 'application/json');
+    return this.http
+      .get(this.drupalUrl + "/" + category, {search: dosearch, headers: doheaders})
+      .map((response) => response.json());
+>>>>>>> b1623af9d149426790fbbedacb0e2d85685dd724
   }
-  
+
   rawContentSearch(category:string, term:string, subcategories:any[]) {
+<<<<<<< HEAD
      this.dosearch=new URLSearchParams();
+=======
+    var dosearch = new URLSearchParams();
+
+>>>>>>> b1623af9d149426790fbbedacb0e2d85685dd724
     if (term != undefined && term.trim() != "") {
       this.dosearch.set('search_string', term);
     }
@@ -79,6 +124,7 @@ export class DrupalService {
     }
     
     let doheaders = new Headers();
+<<<<<<< HEAD
     doheaders.set('Accept', 'application/json');  
    
       // Test Shibboleth Parameters
@@ -106,6 +152,13 @@ export class DrupalService {
       .get(this.thisUrl + "?sort=nid&fields=all&sort_order=ASC&&limit=10000&type=" + category, {search:this.dosearch, headers:doheaders})
       .map((response) => this.extractData(response, category, subcategories));
     }    
+=======
+    doheaders.set('Accept', 'application/json');
+    return this.http
+      .get(this.drupalUrl + "?type=" + category, {search: dosearch, headers: doheaders})
+      .map((response) => response.json());
+
+>>>>>>> b1623af9d149426790fbbedacb0e2d85685dd724
   }
 
   rawFrontSearch(category:string, term:string, subcategories:any[]) {
