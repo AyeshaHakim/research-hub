@@ -80,7 +80,20 @@ export class DrupalService {
     
     let doheaders = new Headers();
     doheaders.set('Accept', 'application/json');  
-    
+   
+      // Test Shibboleth Parameters
+      //let testheaders = new Headers();
+      //testheaders.set('withCredentials', 'true');
+      //testheaders.set('Access-Control-Allow-Credentials','true');
+      //console.log('in content search');
+      //this.http.get("https://researchit.cer.auckland.ac.nz/Shibboleth.sso/Session",{headers:testheaders})
+      //  .map(res => res)
+      //  .subscribe(
+      //  data => this.mydata = data,
+      //  err => console.log(err),
+      //  () => console.log('Completed', this.mydata));   
+      //---------------- 
+      
    if (category=='lifecycle')
    {
       return this.http

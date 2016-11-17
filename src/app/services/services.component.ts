@@ -6,7 +6,8 @@ import {DrupalService} from "../app.drupal.service";
 
 @Component({
   //selector:'hello',
-  templateUrl: './services.component.html'
+  templateUrl: './services.component.html',
+ // styleUrls: ['./services.component.scss']
 })
 export class ServicesComponent implements OnInit, AfterViewInit {
   services: Observable<Array<string>>;    

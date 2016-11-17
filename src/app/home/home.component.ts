@@ -2,6 +2,7 @@ import {Component, OnInit, AfterViewInit, OnDestroy} from "@angular/core";
 import {SearchService} from "../app.search.service";
 import {Observable} from "rxjs/Rx";
 import {DrupalService} from "../app.drupal.service";
+declare var $:any;
 
 @Component({
     templateUrl: './home.component.html',
