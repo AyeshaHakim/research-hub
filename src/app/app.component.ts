@@ -4,7 +4,9 @@ import {SearchService} from "./app.search.service";
 import {DrupalService} from "./app.drupal.service";
 import {Observable} from "rxjs/Rx";
 import * as moment from 'moment';
+
 declare var $:any;
+declare var require:any;
 
 @Component({
   selector: 'app-root',
@@ -15,10 +17,7 @@ declare var $:any;
 export class AppComponent implements OnInit {
   router:Router;
   
-  basePath = "/";
-  redirectHash = "";
-  redirectPath;
-  isLoggedIn=false;
+  isLoggedIn:any;
   
   lifeCycle: string = "";
   serviceType: string = "";
@@ -40,7 +39,12 @@ export class AppComponent implements OnInit {
       $('select').material_select();
     });
   }
-          
+   
+  getCookie(key: string){
+   // console.log(this.drupalService.getCookie('isLoggedIn'));
+    return this.drupalService.getCookie('isLoggedIn');
+  }
+        
   populateCombos()
   {
     this.lifeCycleCategories=this.drupalService.populateTaxonomies('cat_lifecycle', this.searchService.searchChange);
@@ -62,22 +66,22 @@ export class AppComponent implements OnInit {
 
   isServicesActive()
   {
-    return this.router.isActive('productList/service', true);
+    return this.router.isActive('services', true);
   }
 
   isEducationActive()
   {
-    return this.router.isActive('productList/education', true);
+    return this.router.isActive('education', true);
   }
 
   isGuidesActive()
   {
-    return this.router.isActive('productList/guide', true);
+    return this.router.isActive('guides', true);
   }
 
   isPoliciesActive()
   {
-    return this.router.isActive('productList/policy', true);
+    return this.router.isActive('policies', true);
   }
   
   isLifecycleActive()
@@ -119,13 +123,15 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     console.log('init!');
-    this.populateCombos();
-    $('.button-collapse').sideNav({
+
+        this.populateCombos();
+        $('.button-collapse').sideNav({
         menuWidth: 260, // Default is 240
         edge: 'left', // Choose the horizontal origin
         closeOnClick: false // Closes side-nav on <a> clicks, useful for Angular/Meteor
-      }
-    );
+        }
+        );
+            
 
     $(document).ready(() => {
       //Update model when select dropdowns changed
@@ -153,5 +159,12 @@ export class AppComponent implements OnInit {
         this.updateSubcategories();
       });
     });
-  }
+        this.drupalService.verifyUser();
+        this.isLoggedIn=this.drupalService.getCookie('isLoggedIn');
+      //  console.log('user logged in' + this.isLoggedIn == 'true');
+        //$location.path('/research-hub/');
+        //$window.location.reload();
+         //$route.reload();
+          //  window.location.reload(); 
+    }
 }

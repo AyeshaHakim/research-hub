@@ -18,7 +18,7 @@ export class EdudetailsComponent implements OnInit, AfterViewInit {
         doheaders.set('Accept', 'application/json');
         this.id = this.route.snapshot.params['id'];
 
-        this.http.get(this.drupalService.thisUrl + "/" + this.id, {headers:doheaders})
+        this.http.get(this.drupalService.drupalUrl + "/" + this.id, {headers:doheaders})
         .map(res => res.json())
         .subscribe(
         data => this.product = data,

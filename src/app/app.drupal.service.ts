@@ -1,13 +1,17 @@
-import {Injectable} from '@angular/core';
+import {Component,Injectable} from '@angular/core';
 import {Subject} from "rxjs/Rx";
 import {Http, Response, URLSearchParams, Headers} from "@angular/http";
 import {Observable} from "rxjs/Rx";
+import {CookieService} from "angular2-cookie/core";
+
+@Component({
+    providers: [CookieService]
+})
 
 @Injectable()
 export class DrupalService {
-<<<<<<< HEAD
   //private rootUrl = "https://localhost:3027/";
-  thisUrl = "https://researchit.cer.auckland.ac.nz/api/content";
+  drupalUrl = "https://researchit.cer.auckland.ac.nz/api/content";
   vid_service=2;
   vid_lifecycle=3;
   vid_policy=4;
@@ -17,27 +21,13 @@ export class DrupalService {
   mydata:any;
   combos: any[];
   dosearch:any;
-      
- constructor(private http:Http) {
+       
+        
+ constructor(private http:Http, private cookieService: CookieService) {
     
   }
- getparams()
- {
-    return this.dosearch;
- }
- 
- search(category:string, searchChange:Subject<any>, debounceDuration = 400) {
-=======
-  private rootUrl = "https://localhost:3027/";
-  drupalUrl = "https://researchit.cer.auckland.ac.nz/api/content";
-
-  product:any;
-
-  constructor(private http:Http) {
-
-  }
-
-  getProducts(productType)
+      
+ getProducts(productType)
   {
 
   }
@@ -50,22 +40,26 @@ export class DrupalService {
     return this.http.get(this.drupalUrl + "/" + productId, {headers:headers})
       .map((response) => response.json());
   }
-
-  search(category:string, searchChange:Subject<any>, debounceDuration = 400) {
->>>>>>> b1623af9d149426790fbbedacb0e2d85685dd724
+      
+ getparams()
+ {
+    return this.dosearch;
+ }
+ 
+ search(category:string, searchChange:Subject<any>, debounceDuration = 400) {
     return searchChange
       .debounceTime(debounceDuration)
       .distinctUntilChanged()
       .switchMap(value => this.rawSearch(category, value.searchTerm, value.subcategories));
   }
-
-  contentSearch(category:string, searchChange:Subject<any>, debounceDuration = 400) {
-    return searchChange
+      
+ contentsearch(category:string, searchChange:Subject<any>, debounceDuration = 400) {
+   
+     return searchChange
       .debounceTime(debounceDuration)
       .distinctUntilChanged()
       .switchMap(value => this.rawContentSearch(category, value.searchTerm, value.subcategories));
   }
-<<<<<<< HEAD
      
   frontsearch(category:string, searchChange:Subject<any>, debounceDuration = 400) {
     return searchChange
@@ -73,15 +67,65 @@ export class DrupalService {
       .distinctUntilChanged()
       .switchMap(value => this.rawFrontSearch(category, value.searchTerm, value.subcategories));
   }
-         
+      
+  setCookie(key:string, value:string){
+    this.cookieService.put(key, value);
+  }
+      
+  getCookie(key: string){
+   // console.log(this.cookieService.get(key));
+    return this.cookieService.get(key);
+  }
+      
+  removeCookie(key: string){   
+    this.cookieService.remove(key);
+  }
+      
+   verifyUser() {
+    let doheaders = new Headers();
+    doheaders.set('withCredentials', 'true');
+    doheaders.set('Accept', 'application/json');
+    this.http.get("https://researchit.cer.auckland.ac.nz/Shibboleth.sso/Session",{headers:doheaders})
+         .map((response) => this.userLoggedIn(response))
+         .subscribe(
+         data => this.mydata = data,
+         err => console.log(err));
+      
+      //   () => console.log('Completed', this.mydata));
+     //window.location.reload(); 
+  // return this.mydata;
+  }
+   
+  private userLoggedIn(response)
+  {
+    //console.log(response);
+    let res = response._body;
+    //console.log('in user logged in');
+    var plainString = res.replace(/(<([^>]+)>)/ig,"");
+
+    if(response.status==200)
+    {
+     	var jsonResponse = JSON.parse(JSON.stringify(plainString));
+
+        console.log(jsonResponse);
+
+        if(jsonResponse.search("uid")>-1)
+        {
+	console.log("User logged In");
+        this.setCookie('isLoggedIn', 'true');
+      //  return true;
+        }
+	else
+	{
+	console.log("User not logged In");
+        this.removeCookie('isLoggedIn');
+       // return false;
+        }
+     }
+  }   
+  
   rawSearch(category:string, term:string, subcategories:any[]) {
      this.dosearch=new URLSearchParams();
-=======
-
-  rawSearch(category:string, term:string, subcategories:any[]) {
-    var dosearch = new URLSearchParams();
-    console.log(dosearch);
->>>>>>> b1623af9d149426790fbbedacb0e2d85685dd724
     if (term != undefined && term.trim() != "") {
       this.dosearch.set('search_string', term);
     }
@@ -92,27 +136,15 @@ export class DrupalService {
       }
     }
     let doheaders = new Headers();
-<<<<<<< HEAD
     doheaders.set('Accept', 'application/json'); 
     return this.http
-    .get(this.thisUrl + "?limit=10000&fields=all" , {search:this.dosearch, headers:doheaders})
+    .get(this.drupalUrl + "?limit=10000&fields=all" , {search:this.dosearch, headers:doheaders})
     .map((response)=>response.json());
 
-=======
-    doheaders.set('Accept', 'application/json');
-    return this.http
-      .get(this.drupalUrl + "/" + category, {search: dosearch, headers: doheaders})
-      .map((response) => response.json());
->>>>>>> b1623af9d149426790fbbedacb0e2d85685dd724
   }
-
+  
   rawContentSearch(category:string, term:string, subcategories:any[]) {
-<<<<<<< HEAD
      this.dosearch=new URLSearchParams();
-=======
-    var dosearch = new URLSearchParams();
-
->>>>>>> b1623af9d149426790fbbedacb0e2d85685dd724
     if (term != undefined && term.trim() != "") {
       this.dosearch.set('search_string', term);
     }
@@ -124,44 +156,24 @@ export class DrupalService {
     }
     
     let doheaders = new Headers();
-<<<<<<< HEAD
     doheaders.set('Accept', 'application/json');  
-   
-      // Test Shibboleth Parameters
-      //let testheaders = new Headers();
-      //testheaders.set('withCredentials', 'true');
-      //testheaders.set('Access-Control-Allow-Credentials','true');
-      //console.log('in content search');
-      //this.http.get("https://researchit.cer.auckland.ac.nz/Shibboleth.sso/Session",{headers:testheaders})
-      //  .map(res => res)
-      //  .subscribe(
-      //  data => this.mydata = data,
-      //  err => console.log(err),
-      //  () => console.log('Completed', this.mydata));   
-      //---------------- 
-      
+    
    if (category=='lifecycle')
    {
       return this.http
-      .get(this.thisUrl + "?sort=nid&fields=all&sort_order=ASC&&limit=10000", {search:this.dosearch, headers:doheaders})
+      .get(this.drupalUrl + "?sort=nid&fields=all&sort_order=ASC&&limit=10000", {search:this.dosearch, headers:doheaders})
       .map((response) => this.extractData(response, category, subcategories));
     }
     else
     {
        return this.http
-      .get(this.thisUrl + "?sort=nid&fields=all&sort_order=ASC&&limit=10000&type=" + category, {search:this.dosearch, headers:doheaders})
+      .get(this.drupalUrl + "?sort=nid&fields=all&sort_order=ASC&&limit=10000&type=" + category, {search:this.dosearch, headers:doheaders})
       .map((response) => this.extractData(response, category, subcategories));
     }    
-=======
-    doheaders.set('Accept', 'application/json');
-    return this.http
-      .get(this.drupalUrl + "?type=" + category, {search: dosearch, headers: doheaders})
-      .map((response) => response.json());
-
->>>>>>> b1623af9d149426790fbbedacb0e2d85685dd724
   }
 
   rawFrontSearch(category:string, term:string, subcategories:any[]) {
+    console.log('in raw front search');
      this.dosearch=new URLSearchParams();
     if (term != undefined && term.trim() != "") {
       this.dosearch.set('search_string', term);
@@ -177,8 +189,9 @@ export class DrupalService {
     doheaders.set('Accept', 'application/json'); 
    
     return this.http
-      .get(this.thisUrl + "?fields=all&sort_order=ASC&&limit=10000", {search:this.dosearch, headers:doheaders})
-      .map((response) => this.cleanData(response));
+      .get(this.drupalUrl + "?fields=all&sort_order=ASC&&limit=10000", {search:this.dosearch, headers:doheaders})
+      .map((response) => this.cleanData(response),
+      err => console.log(err));    
   }
   
   populateTaxonomies(category:string, searchChange:Subject<any>, debounceDuration = 400)
@@ -196,31 +209,31 @@ export class DrupalService {
     if(category=='cat_lifecycle')
     {
     return this.http
-    .get(this.thisUrl + "?fields=all&sort_order=ASC&&limit=10000", {headers:doheaders})
+    .get(this.drupalUrl + "?fields=all&sort_order=ASC&&limit=10000", {headers:doheaders})
     .map((response) => this.getLifecycleCat(response));
     }
     if(category=='cat_service')
     {
     return this.http
-    .get(this.thisUrl + "?fields=all&sort_order=ASC&&limit=10000", {headers:doheaders})
+    .get(this.drupalUrl + "?fields=all&sort_order=ASC&&limit=10000", {headers:doheaders})
     .map((response) => this.getServiceCat(response));
     }
     if(category=='cat_prog')
     {
     return this.http
-    .get(this.thisUrl + "?fields=all&sort_order=ASC&&limit=10000", {headers:doheaders})
+    .get(this.drupalUrl + "?fields=all&sort_order=ASC&&limit=10000", {headers:doheaders})
     .map((response) => this.getProgCat(response));
     }
     if(category=='cat_study')
     {
     return this.http
-    .get(this.thisUrl + "?fields=all&sort_order=ASC&&limit=10000", {headers:doheaders})
+    .get(this.drupalUrl + "?fields=all&sort_order=ASC&&limit=10000", {headers:doheaders})
     .map((response) => this.getStudyCat(response));
     }
     if(category=='cat_policy')
     {
     return this.http
-    .get(this.thisUrl + "?fields=all&sort_order=ASC&&limit=10000", {headers:doheaders})
+    .get(this.drupalUrl + "?fields=all&sort_order=ASC&&limit=10000", {headers:doheaders})
     .map((response) => this.getPolicyCat(response));
     }
   }
@@ -342,6 +355,7 @@ export class DrupalService {
   }
   
   private cleanData(response) {
+  console.log(response.json());
      let res = response.json();
      let transRes = [];
      for (var i=1;i<res.length;i++) 
