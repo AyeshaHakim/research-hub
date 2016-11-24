@@ -13,9 +13,13 @@
     </div>
       
        <div *ngIf="getCookie()=='false' || getCookie()==undefined" class="waves-effect topcorner">
+           <!-- Show Google ball Testing-->
            <a href="https://researchit.cer.auckland.ac.nz/Shibboleth.sso/Login?target=http://localhost:4203/#/home/"><input  value="Sign in" type="button" class="btn btn-primary btn-lg"></a>
+           <a href=""><img align="middle" width="32px" height="32px" src="assets/profile.png" value="Sign in"></a>
        </div>
        <div *ngIf="getCookie()=='true'" class="waves-effect topcorner">
+           <!-- Show Google ball -->
+           
            <span> Welcome Ayesha!  <a href="https://researchit.cer.auckland.ac.nz/Shibboleth.sso/Logout?return=http://localhost:4203/#/home/"><input value="Logout" type="button" class="btn btn-primary btn-lg"></a> </span>
        </div>
        <!--<div class="waves-effect waves-brown topcorner">
