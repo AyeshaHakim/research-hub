@@ -176,8 +176,40 @@
     </div>
 
     <div class="divider"></div>
-
-    <div class="card-content">
+     <!-- Write review code here -->
+      <div class="review-panel-content">
+      <form action="">
+      <div class="review-profile apps">
+          <div class="review-profile-name">WRITE A REVIEW</div>
+      </div>
+        <div>
+            <textarea class="review-input-text-box write-review-comment" maxlength="1200" placeholder="Tell others what you think about this app. Would you recommend it and why?" aria-label="Tell others what you think about this app. Would you recommend it and why?"></textarea>
+        </div>
+        <div class="review-row max-char-alert-row" aria-atomic="true" aria-live="assertive" role="alert"> <span class="id-max-char-alert-message-container" style="display:none"> <span aria-hidden="true">No more space</span> <span class="off-screen">No more space in review dialogue</span> </span> </div>
+        <div class="review-row cont">
+          <div class="stars">
+                <input style="background-color: #fff !important; border: none !important; width: 0px !important; height:0px !important;" class="star star-5" id="star-5-2" type="radio" name="star" value="5"><label class="star star-5" for="star-5-2"></label>
+                <input  class="star star-4" id="star-4-2" type="radio" name="star" value="4"><label class="star star-4" for="star-4-2"></label>
+                <input  class="star star-3" id="star-3-2" type="radio" name="star" value="3"><label class="star star-3" for="star-3-2"></label>
+                <input  class="star star-2" id="star-2-2" type="radio" name="star" value="2"><label class="star star-2" for="star-2-2"></label>
+                <input  class="star star-1" id="star-1-2" type="radio" name="star" value="1"><label class="star star-1" for="star-1-2"></label>             
+          </div>
+        </div>
+        <div class="review-row button">  
+            <div class="review-action-button-container">  
+                <a href="#" class="waves-effect waves-brown btn" style="text-align: right;">SUBMIT</a>
+            </div> 
+            
+            <div class="review-action-button-container cancel-button"> 
+                <a href="#" style="text-align: right;">CANCEL</a>
+            </div>  
+        </div>
+      </form>
+  </div>
+     
+      <!-- Review code ended -->
+      
+      <div class="card-content" style="margin-top: 50px">
       <div class="row" style="margin-bottom: 0;">
         <div class="col">
           <span class="info-category">Reviews</span>
